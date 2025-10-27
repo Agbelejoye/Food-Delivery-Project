@@ -37,14 +37,20 @@
             
             <!-- Role-specific navigation -->
             <li v-if="authStore.isAgent" class="nav-item">
-              <router-link class="nav-link" to="/agent-dashboard" active-class="active">
+              <router-link class="nav-link" to="/agent/dashboard" active-class="active">
                 <i class="bi bi-truck me-1"></i>Agent Dashboard
               </router-link>
             </li>
             
             <li v-if="authStore.isAdmin" class="nav-item">
-              <router-link class="nav-link" to="/admin-dashboard" active-class="active">
+              <router-link class="nav-link" to="/admin/dashboard" active-class="active">
                 <i class="bi bi-gear me-1"></i>Admin Panel
+              </router-link>
+            </li>
+            
+            <li v-if="authStore.isRestaurant" class="nav-item">
+              <router-link class="nav-link" to="/restaurant/dashboard" active-class="active">
+                <i class="bi bi-shop me-1"></i>Restaurant Dashboard
               </router-link>
             </li>
             
@@ -101,15 +107,22 @@ const router = useRouter()
 
 const handleLogout = () => {
   authStore.logout()
-  cartStore.items = []
+  cartStore.clearCart()
   router.push('/')
 }
+
+onMounted(() => {
+  authStore.initializeAuth()
+  if (authStore.isAuthenticated) {
+    cartStore.fetchCart()
+  }
+})
 </script>
 
 <style scoped>
 .navbar {
   backdrop-filter: blur(10px);
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+  background: linear-gradient(135deg, var(--black-900) 0%, var(--black-800) 100%) !important;
 }
 
 .navbar-brand {
@@ -125,12 +138,12 @@ const handleLogout = () => {
 }
 
 .nav-link:hover {
-  background-color: rgba(255,255,255,0.1);
+  background-color: rgba(201,162,39,0.12);
   transform: translateY(-2px);
 }
 
 .nav-link.active {
-  background-color: rgba(255,255,255,0.2);
+  background-color: rgba(201,162,39,0.18);
   font-weight: 600;
 }
 
@@ -139,12 +152,12 @@ const handleLogout = () => {
 }
 
 .navbar-toggler:focus {
-  box-shadow: 0 0 0 0.25rem rgba(255,255,255,0.25);
+  box-shadow: 0 0 0 0.25rem rgba(201,162,39,0.25);
 }
 
 .dropdown-menu {
   border: none;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.45);
   border-radius: 12px;
 }
 
@@ -154,7 +167,7 @@ const handleLogout = () => {
 }
 
 .dropdown-item:hover {
-  background-color: #f8f9fa;
+  background-color: rgba(201,162,39,0.12);
   transform: translateX(5px);
 }
 
@@ -168,8 +181,8 @@ const handleLogout = () => {
   }
   
   .dropdown-menu {
-    border: 1px solid rgba(255,255,255,0.1);
-    background-color: rgba(255,255,255,0.95);
+    border: 1px solid rgba(201,162,39,0.15);
+    background-color: rgba(11,11,12,0.95);
   }
 }
 </style>

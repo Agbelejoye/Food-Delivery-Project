@@ -39,7 +39,7 @@
             </div>
           </div>
           <div class="col-lg-6 text-center">
-            <img src="/api/placeholder/500/400" alt="Food delivery hero image showing delicious meals" class="img-fluid rounded shadow">
+            <img src="https://avatars.mds.yandex.net/i?id=7a0c529ceb6f5eea60759967a280a5ef5e4fd781-16493534-images-thumbs&n=13" alt="Food delivery hero image showing delicious meals" class="img-fluid rounded shadow">
           </div>
         </div>
       </div>
@@ -305,7 +305,7 @@ onMounted(() => {
 <style scoped>
 /* Hero Section */
 .hero-section {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, var(--black-900) 0%, var(--black-800) 100%);
   position: relative;
   padding-top: 80px;
 }
@@ -355,23 +355,23 @@ onMounted(() => {
 .section-title {
   font-size: 2.5rem;
   font-weight: 700;
-  color: #333;
+  color: var(--text-on-dark);
   margin-bottom: 1rem;
 }
 
 .section-subtitle {
   font-size: 1.1rem;
-  color: #666;
+  color: #cfcfc9;
   margin-bottom: 0;
 }
 
 /* Categories */
 .category-card {
-  background: white;
+  background: var(--black-800);
   border-radius: 15px;
   padding: 2rem 1rem;
   text-align: center;
-  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+  box-shadow: 0 5px 15px rgba(0,0,0,0.35);
   transition: all 0.3s ease;
   cursor: pointer;
 }
@@ -388,16 +388,16 @@ onMounted(() => {
 
 .category-name {
   font-weight: 600;
-  color: #333;
+  color: var(--text-on-dark);
   margin-bottom: 0;
 }
 
 /* Restaurant Cards */
 .restaurant-card {
-  background: white;
+  background: var(--black-800);
   border-radius: 15px;
   overflow: hidden;
-  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+  box-shadow: 0 5px 15px rgba(0,0,0,0.35);
   transition: all 0.3s ease;
 }
 
@@ -422,6 +422,8 @@ onMounted(() => {
   position: absolute;
   top: 15px;
   right: 15px;
+  background: var(--gold-500);
+  color: var(--black-900);
 }
 
 .restaurant-info {
@@ -430,12 +432,12 @@ onMounted(() => {
 
 .restaurant-name {
   font-weight: 700;
-  color: #333;
+  color: var(--gold-500);
   margin-bottom: 0.5rem;
 }
 
 .restaurant-cuisine {
-  color: #666;
+  color: #cfcfc9;
   margin-bottom: 1rem;
 }
 
@@ -443,15 +445,15 @@ onMounted(() => {
   display: flex;
   justify-content: space-between;
   font-size: 0.9rem;
-  color: #666;
+  color: #cfcfc9;
 }
 
 /* Dish Cards */
 .dish-card {
-  background: white;
+  background: var(--black-800);
   border-radius: 15px;
   overflow: hidden;
-  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+  box-shadow: 0 5px 15px rgba(0,0,0,0.35);
   transition: all 0.3s ease;
 }
 
@@ -490,12 +492,12 @@ onMounted(() => {
 
 .dish-name {
   font-weight: 600;
-  color: #333;
+  color: var(--text-on-dark);
   margin-bottom: 0.5rem;
 }
 
 .dish-restaurant {
-  color: #666;
+  color: #cfcfc9;
   font-size: 0.9rem;
   margin-bottom: 0.5rem;
 }
@@ -503,7 +505,7 @@ onMounted(() => {
 .dish-price {
   font-size: 1.2rem;
   font-weight: 700;
-  color: #007bff;
+  color: var(--gold-500);
 }
 
 /* How It Works */
@@ -514,7 +516,7 @@ onMounted(() => {
 .step-icon {
   font-size: 3rem;
   margin-bottom: 1.5rem;
-  color: #ffc107;
+  color: var(--gold-500);
 }
 
 .step-title {

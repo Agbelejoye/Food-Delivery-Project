@@ -489,11 +489,11 @@ onMounted(() => {
 .menu-title {
   font-size: 2.5rem;
   font-weight: 700;
-  color: #333;
+  color: var(--text-on-dark);
 }
 
 .menu-subtitle {
-  color: #666;
+  color: #cfcfc9;
   font-size: 1.1rem;
 }
 
@@ -512,12 +512,12 @@ onMounted(() => {
 
 .filter-title {
   font-weight: 600;
-  color: #333;
+  color: var(--text-on-dark);
   margin-bottom: 1rem;
 }
 
 .filter-section {
-  border-bottom: 1px solid #f0f0f0;
+  border-bottom: 1px solid #2a2b2f;
   padding-bottom: 1rem;
 }
 
@@ -531,7 +531,7 @@ onMounted(() => {
 }
 
 .results-count {
-  color: #666;
+  color: #cfcfc9;
   font-weight: 500;
 }
 
@@ -591,7 +591,7 @@ onMounted(() => {
 
 .item-name {
   font-weight: 600;
-  color: #333;
+  color: var(--text-on-dark);
 }
 
 .item-description {
@@ -609,7 +609,7 @@ onMounted(() => {
 .price {
   font-size: 1.2rem;
   font-weight: 700;
-  color: #007bff;
+  color: var(--gold-500);
 }
 
 .original-price {
@@ -630,12 +630,15 @@ onMounted(() => {
 .pagination .page-link {
   border-radius: 8px;
   margin: 0 2px;
-  border: 1px solid #dee2e6;
+  border: 1px solid #2a2b2f;
+  background: var(--black-800);
+  color: var(--text-on-dark);
 }
 
 .pagination .page-item.active .page-link {
-  background-color: #007bff;
-  border-color: #007bff;
+  background-color: var(--gold-500);
+  border-color: var(--gold-500);
+  color: #111;
 }
 
 /* Responsive Design */

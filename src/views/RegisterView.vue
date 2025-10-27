@@ -455,7 +455,7 @@ onMounted(() => {
 }
 
 .register-view {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, var(--black-900) 0%, var(--black-800) 100%);
   min-height: 100vh;
   padding: 2rem 0;
 }
@@ -471,7 +471,7 @@ onMounted(() => {
 .register-title {
   font-size: 2rem;
   font-weight: 700;
-  color: #333;
+  color: var(--text-on-dark);
   margin-bottom: 0.5rem;
 }
 
@@ -491,16 +491,19 @@ onMounted(() => {
 }
 
 .input-group-text {
-  border: 1px solid #dee2e6;
+  border: 1px solid #2a2b2f;
+  background: var(--black-800);
 }
 
 .form-control, .form-select {
-  border: 1px solid #dee2e6;
+  border: 1px solid #2a2b2f;
+  background: var(--black-800);
+  color: var(--text-on-dark);
 }
 
 .form-control:focus, .form-select:focus {
-  border-color: #007bff;
-  box-shadow: none;
+  border-color: var(--gold-500);
+  box-shadow: 0 0 0 0.2rem rgba(201,162,39,0.25);
 }
 
 .password-strength .progress {
@@ -510,6 +513,13 @@ onMounted(() => {
 .password-strength .progress-bar {
   border-radius: 10px;
   transition: all 0.3s ease;
+}
+
+/* Card surface to dark */
+.register-card .card {
+  background: var(--black-800);
+  color: var(--text-on-dark);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.45);
 }
 
 @keyframes slideUp {

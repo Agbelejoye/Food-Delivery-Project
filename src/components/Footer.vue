@@ -104,7 +104,7 @@
 
 <style scoped>
 footer a:hover {
-  color: #007bff !important;
+  color: var(--gold-500) !important;
   transition: color 0.3s ease;
 }
 

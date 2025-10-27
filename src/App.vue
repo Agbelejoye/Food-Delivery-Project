@@ -15,7 +15,8 @@ body {
   margin: 0;
   padding: 0;
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
-  background-color: #f8f9fa;
+  background-color: var(--black-900);
+  color: var(--text-on-dark);
 }
 
 #app {
@@ -46,8 +47,8 @@ body {
 }
 
 .form-control:focus, .form-select:focus {
-  border-color: #007bff;
-  box-shadow: 0 0 0 0.2rem rgba(0,123,255,0.25);
+  border-color: var(--gold-500);
+  box-shadow: 0 0 0 0.2rem rgba(201,162,39,0.25);
 }
 
 /* Responsive utilities */

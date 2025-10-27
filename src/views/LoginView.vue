@@ -116,7 +116,7 @@
         <!-- Right Side - Image/Branding -->
         <div class="col-lg-6 d-none d-lg-flex align-items-center justify-content-center bg-primary text-white">
           <div class="text-center">
-            <img src="/api/placeholder/400/300" alt="Food delivery illustration" class="img-fluid mb-4 rounded">
+            <img src="https://avatars.mds.yandex.net/i?id=7a0c529ceb6f5eea60759967a280a5ef5e4fd781-16493534-images-thumbs&n=13" alt="Food delivery illustration" class="img-fluid mb-4 rounded">
             <h3 class="fw-bold mb-3">Delicious Food Awaits</h3>
             <p class="lead mb-4">Join thousands of satisfied customers who trust FoodExpress for fast, reliable food delivery</p>
             <div class="row text-center">
@@ -234,35 +234,35 @@ onMounted(() => {
 <style scoped>
 .login-page {
   min-height: 100vh;
-  background: #f8f9fa;
+  background: var(--black-900);
 }
 
 .login-form-container {
   padding: 2rem;
-  background: white;
+  background: var(--black-800);
   border-radius: 10px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.45);
   animation: slideUp 0.6s ease-out;
 }
 
 .form-control:focus {
-  border-color: #007bff;
-  box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+  border-color: var(--gold-500);
+  box-shadow: 0 0 0 0.2rem rgba(201, 162, 39, 0.25);
 }
 
 .input-group-text {
-  background-color: #f8f9fa;
-  border-color: #dee2e6;
+  background-color: var(--black-800);
+  border-color: #2a2b2f;
 }
 
 .btn-primary {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, var(--gold-500) 0%, var(--gold-600) 100%);
   border: none;
   font-weight: 600;
 }
 
 .btn-primary:hover {
-  background: linear-gradient(135deg, #5a6fd8 0%, #6a4190 100%);
+  background: linear-gradient(135deg, var(--gold-600) 0%, var(--gold-700) 100%);
   transform: translateY(-1px);
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
 }
@@ -274,13 +274,13 @@ onMounted(() => {
 }
 
 .btn-outline-primary:hover {
-  background-color: #0d6efd;
-  border-color: #0d6efd;
+  background-color: var(--gold-500);
+  border-color: var(--gold-500);
   transform: translateY(-1px);
 }
 
 .bg-primary {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+  background: linear-gradient(135deg, var(--black-900) 0%, var(--black-800) 100%) !important;
 }
 
 @keyframes slideUp {

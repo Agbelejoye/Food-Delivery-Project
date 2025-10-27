@@ -1,0 +1,135 @@
+/* Global Gold & Black Theme Overrides */
+:root {
+  --black-900: #0b0b0c;
+  --black-800: #111214;
+  --black-700: #1a1b1e;
+  --gold-500: #D4AF37; /* primary gold (unique, rich) */
+  --gold-600: #C1992D; /* hover */
+  --gold-700: #9E7F23; /* pressed */
+  --muted-100: #f4f1e6; /* light tint for subtle backgrounds on dark */
+  --text-on-dark: #f7f7f5;
+}
+
+/* Base */
+html, body {
+  background-color: var(--black-900) !important;
+  color: var(--text-on-dark);
+}
+
+/* Dark theme helpers */
+.bg-dark { background-color: var(--black-900) !important; }
+.text-dark { color: var(--text-on-dark) !important; }
+.text-light { color: var(--text-on-dark) !important; }
+
+/* Primary color remap to gold */
+.text-primary { color: var(--gold-500) !important; }
+.bg-primary { background-color: var(--gold-500) !important; }
+.border-primary { border-color: var(--gold-500) !important; }
+
+.link-primary { color: var(--gold-500) !important; }
+.link-primary:hover, .link-primary:focus { color: var(--gold-600) !important; }
+
+.btn-primary {
+  color: #111;
+  background-color: var(--gold-500) !important;
+  border-color: var(--gold-500) !important;
+}
+.btn-primary:hover,
+.btn-primary:focus {
+  background-color: var(--gold-600) !important;
+  border-color: var(--gold-600) !important;
+}
+.btn-primary:active,
+.btn-primary.active,
+.show > .btn-primary.dropdown-toggle {
+  background-color: var(--gold-700) !important;
+  border-color: var(--gold-700) !important;
+}
+
+.btn-outline-primary {
+  color: var(--gold-500) !important;
+  border-color: var(--gold-500) !important;
+  background-color: transparent !important;
+}
+.btn-outline-primary:hover,
+.btn-outline-primary:focus {
+  color: #111 !important;
+  background-color: var(--gold-500) !important;
+  border-color: var(--gold-500) !important;
+}
+
+/* Secondary backgrounds to darker blacks to fit palette */
+.bg-light { background-color: var(--black-800) !important; }
+.bg-white { background-color: var(--black-700) !important; }
+.text-muted { color: #cfcfc9 !important; }
+
+/* Light buttons should not be white-dominant on dark theme */
+.btn-light {
+  background-color: var(--black-800) !important;
+  color: var(--text-on-dark) !important;
+  border-color: var(--gold-500) !important;
+}
+.btn-light:hover,
+.btn-light:focus {
+  background-color: var(--black-700) !important;
+  color: var(--text-on-dark) !important;
+  border-color: var(--gold-600) !important;
+}
+
+.btn-outline-light {
+  color: var(--gold-500) !important;
+  border-color: var(--gold-500) !important;
+}
+.btn-outline-light:hover,
+.btn-outline-light:focus {
+  background-color: var(--gold-500) !important;
+  color: #111 !important;
+  border-color: var(--gold-500) !important;
+}
+
+/* Forms focus to gold glow */
+.form-control:focus, .form-select:focus {
+  border-color: var(--gold-500) !important;
+  box-shadow: 0 0 0 0.2rem rgba(201,162,39,0.25) !important;
+  background-color: var(--black-800);
+  color: var(--text-on-dark);
+}
+.form-control, .form-select {
+  background-color: var(--black-800);
+  color: var(--text-on-dark);
+  border-color: #2a2b2f;
+}
+
+/* Cards and surfaces */
+.card {
+  background-color: var(--black-800) !important;
+  color: var(--text-on-dark) !important;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.35) !important;
+}
+
+/* Navbar adjustments (complements component-scoped styles) */
+.navbar-dark .navbar-nav .nav-link.active,
+.navbar-dark .navbar-nav .show > .nav-link {
+  color: var(--gold-500) !important;
+}
+.navbar-dark .navbar-toggler {
+  border-color: rgba(201,162,39,0.35) !important;
+}
+
+/* Dropdowns */
+.dropdown-menu {
+  background-color: var(--black-800) !important;
+  color: var(--text-on-dark) !important;
+}
+.dropdown-item:hover {
+  background-color: rgba(201,162,39,0.12) !important;
+  color: var(--text-on-dark) !important;
+}
+
+/* Badges and alerts accents for visibility on dark */
+.badge.bg-primary { background-color: var(--gold-500) !important; color: #111 !important; }
+.alert-primary {
+  background-color: rgba(201,162,39,0.15) !important;
+  border-color: var(--gold-500) !important;
+  color: var(--text-on-dark) !important;
+}

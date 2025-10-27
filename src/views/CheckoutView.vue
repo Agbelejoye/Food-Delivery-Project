@@ -458,7 +458,7 @@ const placeOrder = async () => {
 .checkout-title {
   font-size: 2.5rem;
   font-weight: 700;
-  color: #333;
+  color: var(--text-on-dark);
 }
 
 .checkout-section {
@@ -475,8 +475,8 @@ const placeOrder = async () => {
 }
 
 .form-check-input:checked {
-  background-color: #007bff;
-  border-color: #007bff;
+  background-color: var(--gold-500);
+  border-color: var(--gold-500);
 }
 
 .order-summary {
@@ -498,7 +498,7 @@ const placeOrder = async () => {
 
 .item-price {
   font-weight: 600;
-  color: #007bff;
+  color: var(--gold-500);
 }
 
 .cost-line {
@@ -513,11 +513,11 @@ const placeOrder = async () => {
   justify-content: space-between;
   align-items: center;
   padding-top: 1rem;
-  border-top: 2px solid #dee2e6;
+  border-top: 2px solid #2a2b2f;
 }
 
 .delivery-estimate {
-  background: linear-gradient(135deg, #e3f2fd 0%, #f3e5f5 100%);
+  background: linear-gradient(135deg, var(--black-900) 0%, var(--black-800) 70%, rgba(212,175,55,0.12) 100%);
   border-radius: 10px;
 }
 

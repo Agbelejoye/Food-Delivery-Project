@@ -277,20 +277,20 @@ const companyValues = ref([
 
 <style scoped>
 .hero-section {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  min-vh-50: 50vh;
+  background: linear-gradient(135deg, var(--black-900) 0%, var(--black-800) 100%);
+  min-height: 50vh;
 }
 
 .section-title {
   font-size: 2.5rem;
   font-weight: 700;
-  color: #333;
+  color: var(--text-on-dark);
   margin-bottom: 1rem;
 }
 
 .section-subtitle {
   font-size: 1.2rem;
-  color: #666;
+  color: #cfcfc9;
   margin-bottom: 2rem;
 }
 
@@ -310,12 +310,12 @@ const companyValues = ref([
 
 .mission-title {
   font-weight: 600;
-  color: #333;
+  color: var(--text-on-dark);
   margin-bottom: 1rem;
 }
 
 .mission-description {
-  color: #666;
+  color: #cfcfc9;
   line-height: 1.6;
 }
 
@@ -331,15 +331,15 @@ const companyValues = ref([
 
 .stat-label {
   font-size: 1.1rem;
-  color: #666;
+  color: #cfcfc9;
   margin: 0;
 }
 
 .team-card {
   padding: 2rem 1rem;
-  background: white;
+  background: var(--black-800);
   border-radius: 15px;
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.35);
   transition: transform 0.3s ease;
 }
 
@@ -355,7 +355,7 @@ const companyValues = ref([
 
 .team-name {
   font-weight: 600;
-  color: #333;
+  color: var(--text-on-dark);
   margin-bottom: 0.5rem;
 }
 
@@ -371,14 +371,14 @@ const companyValues = ref([
 }
 
 .social-link {
-  color: #666;
+  color: #cfcfc9;
   font-size: 1.2rem;
   text-decoration: none;
   transition: color 0.3s ease;
 }
 
 .social-link:hover {
-  color: #007bff;
+  color: var(--gold-500);
 }
 
 .value-card {
@@ -402,18 +402,18 @@ const companyValues = ref([
 }
 
 .cta-section {
-  background: #f8f9fa;
+  background: var(--black-800);
 }
 
 .cta-title {
   font-size: 2.5rem;
   font-weight: 700;
-  color: #333;
+  color: var(--text-on-dark);
 }
 
 .cta-description {
   font-size: 1.2rem;
-  color: #666;
+  color: #cfcfc9;
   line-height: 1.6;
 }
 

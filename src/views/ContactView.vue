@@ -351,31 +351,31 @@ const submitForm = async () => {
 
 <style scoped>
 .hero-section {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, var(--black-900) 0%, var(--black-800) 100%);
 }
 
 .section-title {
   font-size: 2.5rem;
   font-weight: 700;
-  color: #333;
+  color: var(--text-on-dark);
   margin-bottom: 1rem;
 }
 
 .section-subtitle {
   font-size: 1.2rem;
-  color: #666;
+  color: #cfcfc9;
 }
 
 .contact-form-container {
-  background: white;
+  background: var(--black-800);
   padding: 2rem;
   border-radius: 15px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.45);
 }
 
 .contact-form .form-control,
 .contact-form .form-select {
-  border: 2px solid #f0f0f0;
+  border: 2px solid #2a2b2f;
   border-radius: 8px;
   padding: 0.75rem 1rem;
   transition: border-color 0.3s ease;
@@ -383,15 +383,15 @@ const submitForm = async () => {
 
 .contact-form .form-control:focus,
 .contact-form .form-select:focus {
-  border-color: #007bff;
-  box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+  border-color: var(--gold-500);
+  box-shadow: 0 0 0 0.2rem rgba(201, 162, 39, 0.25);
 }
 
 .contact-info {
-  background: white;
+  background: var(--black-800);
   padding: 2rem;
   border-radius: 15px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.45);
   height: fit-content;
   position: sticky;
   top: 100px;
@@ -405,7 +405,7 @@ const submitForm = async () => {
 .contact-icon {
   width: 50px;
   height: 50px;
-  background: rgba(0, 123, 255, 0.1);
+  background: rgba(201, 162, 39, 0.12);
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -420,17 +420,17 @@ const submitForm = async () => {
 
 .contact-details h5 {
   font-weight: 600;
-  color: #333;
+  color: var(--text-on-dark);
   margin-bottom: 0.5rem;
 }
 
 .contact-details a {
-  color: #666;
+  color: #cfcfc9;
   transition: color 0.3s ease;
 }
 
 .contact-details a:hover {
-  color: #007bff;
+  color: var(--gold-500);
 }
 
 .social-links {
@@ -441,19 +441,19 @@ const submitForm = async () => {
 .social-link {
   width: 40px;
   height: 40px;
-  background: #f8f9fa;
+  background: var(--black-800);
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #666;
+  color: #cfcfc9;
   text-decoration: none;
   transition: all 0.3s ease;
 }
 
 .social-link:hover {
-  background: #007bff;
-  color: white;
+  background: var(--gold-500);
+  color: #111;
   transform: translateY(-2px);
 }
 
@@ -462,20 +462,20 @@ const submitForm = async () => {
   margin-bottom: 1rem;
   border-radius: 10px;
   overflow: hidden;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.35);
 }
 
 .accordion-button {
-  background: white;
+  background: var(--black-800);
   border: none;
   font-weight: 600;
-  color: #333;
+  color: var(--text-on-dark);
   padding: 1.25rem 1.5rem;
 }
 
 .accordion-button:not(.collapsed) {
-  background: #007bff;
-  color: white;
+  background: var(--gold-500);
+  color: #111;
 }
 
 .accordion-button:focus {
@@ -484,8 +484,8 @@ const submitForm = async () => {
 
 .accordion-body {
   padding: 1.5rem;
-  background: #f8f9fa;
-  color: #666;
+  background: var(--black-800);
+  color: #cfcfc9;
   line-height: 1.6;
 }
 

@@ -575,7 +575,7 @@ const enableTwoFactor = () => {
 
 .profile-name {
   font-weight: 700;
-  color: #333;
+  color: var(--text-on-dark);
   margin-bottom: 0.5rem;
 }
 
@@ -591,7 +591,7 @@ const enableTwoFactor = () => {
 
 .stat-number {
   font-weight: 700;
-  color: #007bff;
+  color: var(--gold-500);
   margin-bottom: 0.25rem;
 }
 
@@ -603,20 +603,20 @@ const enableTwoFactor = () => {
 .nav-item {
   display: block;
   padding: 1rem 1.5rem;
-  color: #333;
+  color: var(--text-on-dark);
   text-decoration: none;
   border-bottom: 1px solid #f0f0f0;
   transition: all 0.3s ease;
 }
 
 .nav-item:hover {
-  background-color: #f8f9fa;
-  color: #007bff;
+  background-color: rgba(201,162,39,0.12);
+  color: var(--gold-500);
 }
 
 .nav-item.active {
-  background-color: #007bff;
-  color: white;
+  background-color: var(--gold-500);
+  color: #111;
 }
 
 .nav-item:last-child {
@@ -645,12 +645,12 @@ const enableTwoFactor = () => {
 
 .address-item:hover,
 .payment-card:hover {
-  background-color: #f8f9fa;
+  background-color: var(--black-800);
 }
 
 .address-label {
   font-weight: 600;
-  color: #333;
+  color: var(--text-on-dark);
 }
 
 .address-text {
@@ -660,7 +660,7 @@ const enableTwoFactor = () => {
 
 .card-info .card-brand {
   font-weight: 600;
-  color: #333;
+  color: var(--text-on-dark);
 }
 
 .preferences-section {
@@ -675,13 +675,13 @@ const enableTwoFactor = () => {
 
 .section-title {
   font-weight: 600;
-  color: #333;
+  color: var(--text-on-dark);
   margin-bottom: 1rem;
 }
 
 .form-check-input:checked {
-  background-color: #007bff;
-  border-color: #007bff;
+  background-color: var(--gold-500);
+  border-color: var(--gold-500);
 }
 
 .two-factor-section {
