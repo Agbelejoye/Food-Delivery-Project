@@ -3,16 +3,22 @@
   --black-900: #0b0b0c;
   --black-800: #111214;
   --black-700: #1a1b1e;
-  --gold-500: #D4AF37; /* primary gold (unique, rich) */
-  --gold-600: #C1992D; /* hover */
-  --gold-700: #9E7F23; /* pressed */
+  --gold-500: #c9a227; /* primary gold */
+  --gold-600: #b7860b; /* darker gold for hover */
+  --gold-700: #8f6b09; /* Progress bar */
   --muted-100: #f4f1e6; /* light tint for subtle backgrounds on dark */
   --text-on-dark: #f7f7f5;
 }
 
 /* Base */
 html, body {
+  /* Layered background for subtle uniqueness */
   background-color: var(--black-900) !important;
+  background-image:
+    radial-gradient(1200px 600px at 120% -10%, rgba(201,162,39,0.06), transparent 60%),
+    radial-gradient(900px 500px at -20% 120%, rgba(201,162,39,0.05), transparent 55%),
+    linear-gradient(180deg, rgba(255,255,255,0.02), rgba(0,0,0,0.08));
+  background-attachment: fixed;
   color: var(--text-on-dark);
 }
 
@@ -29,15 +35,23 @@ html, body {
 .link-primary { color: var(--gold-500) !important; }
 .link-primary:hover, .link-primary:focus { color: var(--gold-600) !important; }
 
+/* Generic link hover to gold tint on dark */
+a:hover { color: var(--gold-500); }
+
 .btn-primary {
   color: #111;
   background-color: var(--gold-500) !important;
   border-color: var(--gold-500) !important;
+  background-image: linear-gradient(100deg, rgba(255,255,255,0.12), transparent 40%), linear-gradient(180deg, var(--gold-500), var(--gold-600));
+  background-size: 200% 100%, 100% 100%;
+  background-position: -150% 0, 0 0;
+  transition: background-position 0.6s ease;
 }
 .btn-primary:hover,
 .btn-primary:focus {
   background-color: var(--gold-600) !important;
   border-color: var(--gold-600) !important;
+  background-position: 0 0, 0 0;
 }
 .btn-primary:active,
 .btn-primary.active,
@@ -45,6 +59,9 @@ html, body {
   background-color: var(--gold-700) !important;
   border-color: var(--gold-700) !important;
 }
+
+/* Subtle gold glow on focus for all buttons */
+.btn:focus { box-shadow: 0 0 0 0.2rem rgba(201,162,39,0.25) !important; }
 
 .btn-outline-primary {
   color: var(--gold-500) !important;
@@ -63,30 +80,6 @@ html, body {
 .bg-white { background-color: var(--black-700) !important; }
 .text-muted { color: #cfcfc9 !important; }
 
-/* Light buttons should not be white-dominant on dark theme */
-.btn-light {
-  background-color: var(--black-800) !important;
-  color: var(--text-on-dark) !important;
-  border-color: var(--gold-500) !important;
-}
-.btn-light:hover,
-.btn-light:focus {
-  background-color: var(--black-700) !important;
-  color: var(--text-on-dark) !important;
-  border-color: var(--gold-600) !important;
-}
-
-.btn-outline-light {
-  color: var(--gold-500) !important;
-  border-color: var(--gold-500) !important;
-}
-.btn-outline-light:hover,
-.btn-outline-light:focus {
-  background-color: var(--gold-500) !important;
-  color: #111 !important;
-  border-color: var(--gold-500) !important;
-}
-
 /* Forms focus to gold glow */
 .form-control:focus, .form-select:focus {
   border-color: var(--gold-500) !important;
@@ -100,11 +93,18 @@ html, body {
   border-color: #2a2b2f;
 }
 
+/* Gold caret for inputs/textareas */
+input, textarea { caret-color: var(--gold-500); }
+
+/* Placeholder text on dark */
+::placeholder { color: #a6a6a1; }
+
 /* Cards and surfaces */
 .card {
   background-color: var(--black-800) !important;
   color: var(--text-on-dark) !important;
   box-shadow: 0 8px 24px rgba(0,0,0,0.35) !important;
+  border: 1px solid rgba(201,162,39,0.08) !important; /* subtle gold edge */
 }
 
 /* Navbar adjustments (complements component-scoped styles) */
@@ -115,12 +115,24 @@ html, body {
 .navbar-dark .navbar-toggler {
   border-color: rgba(201,162,39,0.35) !important;
 }
+.navbar.shadow { box-shadow: 0 8px 18px rgba(201,162,39,0.12) !important; }
+
+/* Link underline hover effect */
+a, .nav-link {
+  background-image: linear-gradient(var(--gold-500), var(--gold-500));
+  background-size: 0% 2px;
+  background-position: 0 100%;
+  background-repeat: no-repeat;
+  transition: background-size 0.25s ease, color 0.25s ease;
+}
+a:hover, a:focus, .nav-link:hover, .nav-link:focus { background-size: 100% 2px; }
 
 /* Dropdowns */
 .dropdown-menu {
   background-color: var(--black-800) !important;
   color: var(--text-on-dark) !important;
 }
+.dropdown-divider { border-top-color: rgba(201,162,39,0.2); }
 .dropdown-item:hover {
   background-color: rgba(201,162,39,0.12) !important;
   color: var(--text-on-dark) !important;
@@ -133,3 +145,49 @@ html, body {
   border-color: var(--gold-500) !important;
   color: var(--text-on-dark) !important;
 }
+
+/* Selection color */
+::selection { background: rgba(201,162,39,0.35); color: #111; }
+
+/* Scrollbar styling (WebKit) */
+*::-webkit-scrollbar { width: 10px; height: 10px; }
+*::-webkit-scrollbar-track { background: var(--black-900); }
+*::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, var(--gold-600), var(--gold-500));
+  border-radius: 8px;
+  border: 2px solid var(--black-900);
+}
+*::-webkit-scrollbar-thumb:hover { background: linear-gradient(180deg, var(--gold-700), var(--gold-600)); }
+
+/* HR separators */
+hr { border-color: rgba(201,162,39,0.2); }
+
+/* Pagination hover */
+.page-link:hover {
+  background-color: rgba(201,162,39,0.12);
+  border-color: var(--gold-500);
+  color: var(--text-on-dark);
+}
+
+/* Tables */
+.table { color: var(--text-on-dark); background-color: var(--black-800); }
+.table > :not(caption) > * > * { background-color: transparent; }
+.table-striped > tbody > tr:nth-of-type(odd) { background-color: rgba(255,255,255,0.02); }
+.table-hover > tbody > tr:hover { background-color: rgba(201,162,39,0.08); }
+
+/* Modals & toasts */
+.modal-content, .offcanvas, .toast { background-color: var(--black-800); color: var(--text-on-dark); }
+
+/* Pills and tabs */
+.nav-pills .nav-link.active, .nav-pills .show > .nav-link { background-color: var(--gold-500); color: #111; }
+
+/* Checkboxes & radios */
+.form-check-input:checked { background-color: var(--gold-500); border-color: var(--gold-500); }
+
+/* Accordion */
+.accordion-item { background-color: var(--black-800); }
+.accordion-button { background-color: var(--black-800); color: var(--text-on-dark); }
+.accordion-button:not(.collapsed) { background-color: rgba(201,162,39,0.12); color: var(--text-on-dark); }
+
+/* Card hover overlay */
+.card:hover { background-image: linear-gradient(0deg, rgba(201,162,39,0.06), rgba(201,162,39,0.06)); }

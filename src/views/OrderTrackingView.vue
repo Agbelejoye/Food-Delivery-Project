@@ -322,12 +322,12 @@ onMounted(() => {
 .tracking-title {
   font-size: 2.5rem;
   font-weight: 700;
-  color: var(--text-on-dark);
+  color: #333;
 }
 
 .tracking-subtitle {
   font-size: 1.2rem;
-  color: #cfcfc9;
+  color: #666;
   font-weight: 500;
 }
 
@@ -361,19 +361,19 @@ onMounted(() => {
 }
 
 .timeline-step.completed .timeline-icon {
-  background: #1f9d55; /* success on dark */
-  color: var(--text-on-dark);
+  background: #28a745;
+  color: white;
 }
 
 .timeline-step.active .timeline-icon {
-  background: var(--gold-500);
-  color: #111;
+  background: #007bff;
+  color: white;
   animation: pulse 2s infinite;
 }
 
 .timeline-step.pending .timeline-icon {
-  background: var(--black-800);
-  color: #cfcfc9;
+  background: #e9ecef;
+  color: #6c757d;
 }
 
 .timeline-line {
@@ -382,11 +382,11 @@ onMounted(() => {
   top: 3rem;
   width: 2px;
   height: 100%;
-  background: #2a2b2f;
+  background: #dee2e6;
 }
 
 .timeline-step.completed .timeline-line {
-  background: #1f9d55;
+  background: #28a745;
 }
 
 .timeline-content {
@@ -395,24 +395,24 @@ onMounted(() => {
 
 .timeline-title {
   font-weight: 600;
-  color: var(--text-on-dark);
+  color: #333;
   margin-bottom: 0.5rem;
 }
 
 .timeline-description {
-  color: #cfcfc9;
+  color: #666;
   margin-bottom: 0.5rem;
 }
 
 .timeline-time {
-  color: var(--gold-500);
+  color: #007bff;
   font-weight: 500;
 }
 
 /* Map Placeholder */
 .map-placeholder {
   height: 300px;
-  background: linear-gradient(135deg, var(--black-900) 0%, var(--black-800) 70%, rgba(212,175,55,0.12) 100%);
+  background: linear-gradient(135deg, #e3f2fd 0%, #f3e5f5 100%);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -422,7 +422,6 @@ onMounted(() => {
 .map-content i {
   font-size: 3rem;
   margin-bottom: 1rem;
-  color: var(--gold-500);
 }
 
 .delivery-progress {

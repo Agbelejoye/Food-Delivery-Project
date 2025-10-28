@@ -7,6 +7,9 @@ export const useAuthStore = defineStore('auth', () => {
   const isLoading = ref(false)
   const error = ref(null)
 
+  // Configurable API base URL
+  const API_BASE = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000'
+
   const isAuthenticated = computed(() => !!token.value && !!user.value)
   const isCustomer = computed(() => user.value?.role === 'customer')
   const isAgent = computed(() => user.value?.role === 'agent')
@@ -18,7 +21,7 @@ export const useAuthStore = defineStore('auth', () => {
     error.value = null
     
     try {
-      const response = await fetch('http://localhost/backend/api/auth/login', {
+      const response = await fetch(`${API_BASE}/api/auth/login`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -26,6 +29,12 @@ export const useAuthStore = defineStore('auth', () => {
         body: JSON.stringify(credentials)
       })
       
+      if (!response.ok) {
+        // Try to read JSON error, otherwise throw generic
+        let errMsg = 'Login failed'
+        try { const j = await response.json(); errMsg = j.message || errMsg } catch {}
+        throw new Error(errMsg)
+      }
       const data = await response.json()
       
       if (data.success) {
@@ -39,8 +48,8 @@ export const useAuthStore = defineStore('auth', () => {
         return { success: false, message: data.message }
       }
     } catch (err) {
-      error.value = 'Network error. Please try again.'
-      return { success: false, message: 'Network error. Please try again.' }
+      error.value = err?.message || 'Network error. Please try again.'
+      return { success: false, message: error.value }
     } finally {
       isLoading.value = false
     }
@@ -51,7 +60,7 @@ export const useAuthStore = defineStore('auth', () => {
     error.value = null
     
     try {
-      const response = await fetch('http://localhost/backend/api/auth/register', {
+      const response = await fetch(`${API_BASE}/api/auth/register`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -59,6 +68,12 @@ export const useAuthStore = defineStore('auth', () => {
         body: JSON.stringify(userData)
       })
       
+      if (!response.ok) {
+        let errPayload = { message: 'Registration failed' }
+        try { errPayload = await response.json() } catch {}
+        const msg = errPayload.message || 'Registration failed'
+        throw Object.assign(new Error(msg), { payload: errPayload })
+      }
       const data = await response.json()
       
       if (data.success) {
@@ -72,8 +87,11 @@ export const useAuthStore = defineStore('auth', () => {
         return { success: false, message: data.message, errors: data.errors }
       }
     } catch (err) {
-      error.value = 'Network error. Please try again.'
-      return { success: false, message: 'Network error. Please try again.' }
+      // Surface server validation errors if present
+      const msg = err?.message || 'Network error. Please try again.'
+      const payload = err?.payload
+      error.value = msg
+      return { success: false, message: msg, errors: payload?.errors }
     } finally {
       isLoading.value = false
     }

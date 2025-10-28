@@ -478,45 +478,30 @@ const setActiveTab = (tab) => {
   activeTab.value = tab
 }
 
-const changeAvatar = () => {
-  console.log('Change avatar')
-}
 
-const updatePersonalInfo = () => {
-  console.log('Update personal info:', personalInfo.value)
-}
 
-const addNewAddress = () => {
-  console.log('Add new address')
-}
 
-const editAddress = (address) => {
-  console.log('Edit address:', address)
-}
 
-const deleteAddress = (addressId) => {
-  if (confirm('Are you sure you want to delete this address?')) {
-    const index = addresses.value.findIndex(addr => addr.id === addressId)
-    if (index > -1) {
-      addresses.value.splice(index, 1)
-    }
-  }
-}
 
-const addPaymentMethod = () => {
-  console.log('Add payment method')
-}
 
-const editPaymentMethod = (card) => {
-  console.log('Edit payment method:', card)
-}
-
-const deletePaymentMethod = (cardId) => {
-  if (confirm('Are you sure you want to delete this payment method?')) {
+const deletePaymentMethod = async (cardId) => {
+  const { isConfirmed } = await window.Swal.fire({
+    title: 'Delete payment method?',
+    text: 'This action cannot be undone.',
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonText: 'Delete'
+  })
+  if (!isConfirmed) return
+  try {
+    await sleep(300)
     const index = paymentMethods.value.findIndex(card => card.id === cardId)
     if (index > -1) {
       paymentMethods.value.splice(index, 1)
+      showToast('Payment method deleted.')
     }
+  } catch (e) {
+    window.Swal.fire({ icon: 'error', title: 'Failed to delete payment method' })
   }
 }
 
@@ -529,20 +514,193 @@ const getCardIcon = (type) => {
   return icons[type] || 'bi bi-credit-card'
 }
 
-const updatePreferences = () => {
-  console.log('Update preferences:', preferences.value)
+// Helper: mock async API
+const sleep = (ms) => new Promise((r) => setTimeout(r, ms))
+
+// SweetAlert2 helpers
+const showToast = (title, icon = 'success') => {
+  // Swal is provided globally via CDN in index.html
+  return window.Swal?.fire({
+    toast: true,
+    icon,
+    title,
+    position: 'top-end',
+    showConfirmButton: false,
+    timer: 2000,
+    timerProgressBar: true
+  })
 }
 
-const changePassword = () => {
+// Avatar change using prompt (no UI changes)
+const changeAvatar = async () => {
+  const { isConfirmed, value } = await window.Swal.fire({
+    title: 'Change Avatar',
+    input: 'url',
+    inputLabel: 'Image URL',
+    inputValue: userProfile.value.avatar,
+    showCancelButton: true,
+    confirmButtonText: 'Update'
+  })
+  if (!isConfirmed || !value) return
+  try {
+    await sleep(300)
+    userProfile.value.avatar = value
+    showToast('Avatar updated successfully.')
+  } catch (e) {
+    window.Swal.fire({ icon: 'error', title: 'Failed to update avatar' })
+  }
+}
+
+// Personal info update
+const updatePersonalInfo = async () => {
+  try {
+    await sleep(500)
+    showToast('Personal information updated.')
+  } catch (e) {
+    window.Swal.fire({ icon: 'error', title: 'Failed to update information' })
+  }
+}
+
+// Preferences update
+const updatePreferences = async () => {
+  try {
+    await sleep(400)
+    showToast('Preferences saved.')
+  } catch (e) {
+    window.Swal.fire({ icon: 'error', title: 'Failed to save preferences' })
+  }
+}
+
+// Password change
+const changePassword = async () => {
   if (securityForm.value.newPassword !== securityForm.value.confirmPassword) {
-    alert('Passwords do not match')
+    await window.Swal.fire({ icon: 'error', title: 'Passwords do not match' })
     return
   }
-  console.log('Change password')
+  try {
+    await sleep(600)
+    securityForm.value.currentPassword = ''
+    securityForm.value.newPassword = ''
+    securityForm.value.confirmPassword = ''
+    showToast('Password changed.')
+  } catch (e) {
+    window.Swal.fire({ icon: 'error', title: 'Failed to change password' })
+  }
 }
 
-const enableTwoFactor = () => {
-  console.log('Enable 2FA')
+// Two-factor enable
+const enableTwoFactor = async () => {
+  try {
+    await sleep(500)
+    showToast('Two-Factor Authentication enabled.')
+  } catch (e) {
+    window.Swal.fire({ icon: 'error', title: 'Failed to enable 2FA' })
+  }
+}
+
+// Address management using prompt/confirm to avoid UI changes
+let addressIdCounter = ref(1000)
+
+const addNewAddress = async () => {
+  const ask = async (title, inputValue = '') => window.Swal.fire({ title, input: 'text', inputValue, showCancelButton: true })
+  const res1 = await ask('Address Label (e.g., Home, Work)')
+  if (!res1.isConfirmed || !res1.value) return
+  const res2 = await ask('Street')
+  if (!res2.isConfirmed || !res2.value) return
+  const res3 = await ask('City')
+  if (!res3.isConfirmed || !res3.value) return
+  const res4 = await ask('State')
+  if (!res4.isConfirmed || !res4.value) return
+  const res5 = await ask('Zip Code')
+  if (!res5.isConfirmed || !res5.value) return
+  try {
+    await sleep(300)
+    const id = addressIdCounter.value++
+    addresses.value.push({ id, label: res1.value, street: res2.value, city: res3.value, state: res4.value, zipCode: res5.value, isDefault: false })
+    showToast('Address added.')
+  } catch (e) {
+    window.Swal.fire({ icon: 'error', title: 'Failed to add address' })
+  }
+}
+
+const editAddress = async (address) => {
+  const ask = async (title, inputValue = '') => window.Swal.fire({ title, input: 'text', inputValue, showCancelButton: true })
+  const r1 = await ask('Address Label', address.label); if (!r1.isConfirmed || !r1.value) return
+  const r2 = await ask('Street', address.street); if (!r2.isConfirmed || !r2.value) return
+  const r3 = await ask('City', address.city); if (!r3.isConfirmed || !r3.value) return
+  const r4 = await ask('State', address.state); if (!r4.isConfirmed || !r4.value) return
+  const r5 = await ask('Zip Code', address.zipCode); if (!r5.isConfirmed || !r5.value) return
+  try {
+    await sleep(300)
+    address.label = r1.value
+    address.street = r2.value
+    address.city = r3.value
+    address.state = r4.value
+    address.zipCode = r5.value
+    showToast('Address updated.')
+  } catch (e) {
+    window.Swal.fire({ icon: 'error', title: 'Failed to update address' })
+  }
+}
+
+const deleteAddress = async (addressId) => {
+  const { isConfirmed } = await window.Swal.fire({
+    title: 'Delete address?',
+    text: 'This action cannot be undone.',
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonText: 'Delete'
+  })
+  if (!isConfirmed) return
+  try {
+    await sleep(300)
+    const index = addresses.value.findIndex(addr => addr.id === addressId)
+    if (index > -1) {
+      addresses.value.splice(index, 1)
+      showToast('Address deleted.')
+    }
+  } catch (e) {
+    window.Swal.fire({ icon: 'error', title: 'Failed to delete address' })
+  }
+}
+
+// Payment methods management via prompt to avoid UI change
+let paymentIdCounter = ref(1000)
+
+const addPaymentMethod = async () => {
+  const ask = async (title, input = 'text', inputValue = '') => window.Swal.fire({ title, input, inputValue, showCancelButton: true })
+  const r1 = await ask('Card Type (e.g., Visa, Mastercard, Amex)', 'text', 'Visa'); if (!r1.isConfirmed || !r1.value) return
+  const r2 = await ask('Last four digits'); if (!r2.isConfirmed || !r2.value) return
+  if (String(r2.value).length !== 4) { await window.Swal.fire({ icon: 'error', title: 'Enter exactly 4 digits' }); return }
+  const r3 = await ask('Expiry month (MM)', 'text', '12'); if (!r3.isConfirmed || !r3.value) return
+  const r4 = await ask('Expiry year (YY)', 'text', '26'); if (!r4.isConfirmed || !r4.value) return
+  try {
+    await sleep(400)
+    const id = paymentIdCounter.value++
+    paymentMethods.value.push({ id, type: r1.value, lastFour: r2.value, expiryMonth: r3.value, expiryYear: r4.value, isDefault: paymentMethods.value.length === 0 })
+    showToast('Payment method added.')
+  } catch (e) {
+    window.Swal.fire({ icon: 'error', title: 'Failed to add payment method' })
+  }
+}
+
+const editPaymentMethod = async (card) => {
+  const ask = async (title, inputValue = '') => window.Swal.fire({ title, input: 'text', inputValue, showCancelButton: true })
+  const r1 = await ask('Card Type', card.type); if (!r1.isConfirmed || !r1.value) return
+  const r2 = await ask('Last four digits', card.lastFour); if (!r2.isConfirmed || !r2.value) return
+  if (String(r2.value).length !== 4) { await window.Swal.fire({ icon: 'error', title: 'Enter exactly 4 digits' }); return }
+  const r3 = await ask('Expiry month (MM)', card.expiryMonth); if (!r3.isConfirmed || !r3.value) return
+  const r4 = await ask('Expiry year (YY)', card.expiryYear); if (!r4.isConfirmed || !r4.value) return
+  try {
+    await sleep(300)
+    card.type = r1.value
+    card.lastFour = r2.value
+    card.expiryMonth = r3.value
+    card.expiryYear = r4.value
+    showToast('Payment method updated.')
+  } catch (e) {
+    window.Swal.fire({ icon: 'error', title: 'Failed to update payment method' })
+  }
 }
 </script>
 
