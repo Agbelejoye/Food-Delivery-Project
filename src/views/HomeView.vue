@@ -39,7 +39,12 @@
             </div>
           </div>
           <div class="col-lg-6 text-center">
-            <img src="https://avatars.mds.yandex.net/i?id=7a0c529ceb6f5eea60759967a280a5ef5e4fd781-16493534-images-thumbs&n=13" alt="Food delivery hero image showing delicious meals" class="img-fluid rounded shadow">
+            <img
+              :src="heroImages[heroIndex]"
+              alt="Food delivery hero image showing delicious meals"
+              class="img-fluid rounded shadow hero-float"
+              @animationiteration="onHeroAnimIter"
+            >
           </div>
         </div>
       </div>
@@ -173,6 +178,19 @@ const cartStore = useCartStore()
 const authStore = useAuthStore()
 const searchLocation = ref('')
 
+// Hero rotating images (4 images) and floating animation handler
+const heroImages = ref([
+  'https://avatars.mds.yandex.net/i?id=7a0c529ceb6f5eea60759967a280a5ef5e4fd781-16493534-images-thumbs&n=13',
+  'https://images.unsplash.com/photo-1604382354936-07c5d9983bd3?ixlib=rb-4.0.3&auto=format&fit=crop&w=900&q=80',
+  'https://images.unsplash.com/photo-1571091718767-18b5b1457add?ixlib=rb-4.0.3&auto=format&fit=crop&w=900&q=80',
+  'https://images.unsplash.com/photo-1617196034796-73dfa7b1fd56?ixlib=rb-4.0.3&auto=format&fit=crop&w=900&q=80'
+])
+const heroIndex = ref(0)
+
+const onHeroAnimIter = () => {
+  heroIndex.value = (heroIndex.value + 1) % heroImages.value.length
+}
+
 // Sample data
 const categories = ref([
   { id: 1, name: 'Pizza', icon: 'bi bi-circle-fill text-danger' },
@@ -299,6 +317,8 @@ const addToCart = async (dish) => {
 
 onMounted(() => {
   authStore.initializeAuth()
+  // Preload hero images to avoid flicker on swap
+  heroImages.value.forEach((src) => { const img = new Image(); img.src = src })
 })
 </script>
 
@@ -308,6 +328,18 @@ onMounted(() => {
   background: linear-gradient(135deg, var(--black-900) 0%, var(--black-800) 100%);
   position: relative;
   padding-top: 80px;
+}
+
+/* Floating animation for hero image */
+.hero-float {
+  animation: heroFloat 6s ease-in-out infinite;
+  will-change: transform;
+}
+
+@keyframes heroFloat {
+  0% { transform: translateY(0); }
+  50% { transform: translateY(-16px); }
+  100% { transform: translateY(0); }
 }
 
 .hero-overlay {
