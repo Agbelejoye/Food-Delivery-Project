@@ -117,17 +117,17 @@
                         </button>
                         <button 
                           v-if="order.status === 'delivered'"
-                          class="btn btn-success btn-sm me-2"
+                          class="btn btn-primary btn-sm me-2"
                           @click="reorder(order)"
                         >
                           <i class="bi bi-arrow-repeat me-1"></i>Reorder
                         </button>
                         <button 
                           v-if="order.status === 'delivered'"
-                          class="btn btn-outline-warning btn-sm"
+                          class="btn btn-outline-primary btn-sm"
                           @click="rateOrder(order)"
                         >
-                          <i class="bi bi-star me-1"></i>Rate
+                          <i class="bi bi-star-fill me-1"></i>Rate
                         </button>
                       </div>
                     </div>
@@ -176,7 +176,7 @@
     <!-- Order Details Modal -->
     <div class="modal fade" id="orderDetailsModal" tabindex="-1">
       <div class="modal-dialog modal-lg">
-        <div class="modal-content">
+        <div class="modal-content modal-dark">
           <div class="modal-header">
             <h5 class="modal-title">Order Details - #{{ selectedOrder?.id }}</h5>
             <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
@@ -231,8 +231,77 @@
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-            <button type="button" class="btn btn-success" @click="reorder(selectedOrder)">
+            <button type="button" class="btn btn-primary" @click="handleReorderFromModal">
               <i class="bi bi-arrow-repeat me-1"></i>Reorder
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Rating Modal -->
+    <div class="modal fade" id="ratingModal" tabindex="-1">
+      <div class="modal-dialog">
+        <div class="modal-content modal-dark">
+          <div class="modal-header">
+            <h5 class="modal-title">Rate Your Order</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+          </div>
+          <div class="modal-body" v-if="ratingOrder">
+            <div class="text-center mb-4">
+              <h6 class="mb-3">{{ ratingOrder.restaurant }}</h6>
+              <p class="text-muted small">Order #{{ ratingOrder.id }}</p>
+            </div>
+            
+            <!-- Star Rating -->
+            <div class="star-rating text-center mb-4">
+              <button
+                v-for="star in 5"
+                :key="star"
+                class="star-btn"
+                :class="{ active: star <= selectedRating }"
+                @click="selectedRating = star"
+              >
+                <i class="bi" :class="star <= selectedRating ? 'bi-star-fill' : 'bi-star'"></i>
+              </button>
+            </div>
+
+            <!-- Quick Review Options -->
+            <div class="quick-reviews mb-3">
+              <label class="form-label fw-bold">Quick feedback:</label>
+              <div class="d-flex flex-wrap gap-2">
+                <button
+                  v-for="option in reviewOptions"
+                  :key="option"
+                  class="btn btn-sm"
+                  :class="selectedReviews.includes(option) ? 'btn-primary' : 'btn-outline-secondary'"
+                  @click="toggleReview(option)"
+                >
+                  {{ option }}
+                </button>
+              </div>
+            </div>
+
+            <!-- Additional Comments -->
+            <div class="mb-3">
+              <label class="form-label fw-bold">Additional comments (optional):</label>
+              <textarea
+                v-model="reviewComment"
+                class="form-control"
+                rows="3"
+                placeholder="Tell us more about your experience..."
+              ></textarea>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+            <button
+              type="button"
+              class="btn btn-primary"
+              @click="submitRating"
+              :disabled="selectedRating === 0"
+            >
+              Submit Rating
             </button>
           </div>
         </div>
@@ -242,16 +311,38 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
+import { useAuthStore } from '@/stores/auth'
+import { Modal } from 'bootstrap'
 
 const router = useRouter()
+const authStore = useAuthStore()
 
 // Data
 const statusFilter = ref('all')
 const currentPage = ref(1)
 const ordersPerPage = 5
 const selectedOrder = ref(null)
+
+// Rating state
+const ratingOrder = ref(null)
+const selectedRating = ref(0)
+const selectedReviews = ref([])
+const reviewComment = ref('')
+const reviewOptions = ref([
+  'Good Offer',
+  'Fast Delivery',
+  'Great Quality',
+  'Hot & Fresh',
+  'Well Packaged',
+  'Friendly Service',
+  'Generous Portions',
+  'Value for Money'
+])
+
+// Mock user wallet balance
+const userBalance = ref(150.00)
 
 const orders = ref([
   {
@@ -372,19 +463,145 @@ const getStatusBadgeClass = (status) => {
 
 const viewOrderDetails = (order) => {
   selectedOrder.value = order
-  const modal = new bootstrap.Modal(document.getElementById('orderDetailsModal'))
-  modal.show()
+  const modalEl = document.getElementById('orderDetailsModal')
+  if (modalEl) {
+    const modal = new Modal(modalEl)
+    modal.show()
+  }
 }
 
-const reorder = (order) => {
-  console.log('Reordering:', order.id)
-  // Add items to cart and redirect
-  router.push('/cart')
+const reorder = async (order) => {
+  // Check if user is authenticated first
+  if (!authStore.isAuthenticated) {
+    await window.Swal.fire({
+      icon: 'warning',
+      title: 'Authentication Required',
+      text: 'Please log in to reorder items.',
+      confirmButtonText: 'Go to Login',
+      showCancelButton: true,
+      cancelButtonText: 'Cancel'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        router.push('/login')
+      }
+    })
+    return
+  }
+
+  // Validate if user has enough funds
+  if (userBalance.value < order.total) {
+    await window.Swal.fire({
+      icon: 'error',
+      title: 'Insufficient Funds',
+      html: `
+        <p>Your current balance: <strong>$${userBalance.value.toFixed(2)}</strong></p>
+        <p>Order total: <strong>$${order.total.toFixed(2)}</strong></p>
+        <p class="text-muted mt-3">Please add funds to your wallet to complete this order.</p>
+      `,
+      confirmButtonText: 'Add Funds',
+      showCancelButton: true,
+      cancelButtonText: 'Cancel'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        router.push('/profile')
+      }
+    })
+    return
+  }
+
+  // Confirm reorder
+  const { isConfirmed } = await window.Swal.fire({
+    title: 'Reorder Confirmation',
+    html: `
+      <p>You are about to reorder from <strong>${order.restaurant}</strong></p>
+      <p class="mt-2"><strong>Total: $${order.total.toFixed(2)}</strong></p>
+      <p class="text-muted small">Items will be added to your cart.</p>
+    `,
+    icon: 'question',
+    showCancelButton: true,
+    confirmButtonText: 'Yes, Reorder',
+    cancelButtonText: 'Cancel'
+  })
+
+  if (isConfirmed) {
+    // Simulate adding to cart
+    await window.Swal.fire({
+      icon: 'success',
+      title: 'Items Added to Cart',
+      text: `${order.items.length} item(s) from ${order.restaurant} added to your cart.`,
+      timer: 2000,
+      showConfirmButton: false
+    })
+    router.push('/cart')
+  }
 }
 
 const rateOrder = (order) => {
-  console.log('Rating order:', order.id)
-  // Open rating modal or redirect to rating page
+  ratingOrder.value = order
+  selectedRating.value = 0
+  selectedReviews.value = []
+  reviewComment.value = ''
+  const modalEl = document.getElementById('ratingModal')
+  if (modalEl) {
+    const modal = new Modal(modalEl)
+    modal.show()
+  }
+}
+
+const toggleReview = (option) => {
+  const index = selectedReviews.value.indexOf(option)
+  if (index > -1) {
+    selectedReviews.value.splice(index, 1)
+  } else {
+    selectedReviews.value.push(option)
+  }
+}
+
+const submitRating = async () => {
+  if (selectedRating.value === 0) return
+
+  // Close modal first
+  const modalEl = document.getElementById('ratingModal')
+  if (modalEl) {
+    const modal = Modal.getInstance(modalEl)
+    if (modal) {
+      modal.hide()
+    }
+  }
+
+  // Show success
+  await window.Swal.fire({
+    icon: 'success',
+    title: 'Thank You!',
+    html: `
+      <p>Your ${selectedRating.value}-star rating for <strong>${ratingOrder.value.restaurant}</strong> has been submitted.</p>
+      ${selectedReviews.value.length > 0 ? `<p class="text-muted small mt-2">Feedback: ${selectedReviews.value.join(', ')}</p>` : ''}
+    `,
+    confirmButtonText: 'Close'
+  })
+
+  // Reset
+  ratingOrder.value = null
+  selectedRating.value = 0
+  selectedReviews.value = []
+  reviewComment.value = ''
+}
+
+const handleReorderFromModal = async () => {
+  // Close the modal first
+  const modalEl = document.getElementById('orderDetailsModal')
+  if (modalEl) {
+    const modal = Modal.getInstance(modalEl)
+    if (modal) {
+      modal.hide()
+    }
+  }
+  // Wait a bit for modal to close
+  await new Promise(resolve => setTimeout(resolve, 300))
+  // Then proceed with reorder
+  if (selectedOrder.value) {
+    await reorder(selectedOrder.value)
+  }
 }
 
 const changePage = (page) => {
@@ -392,6 +609,11 @@ const changePage = (page) => {
     currentPage.value = page
   }
 }
+
+onMounted(() => {
+  // Initialize auth store
+  authStore.initializeAuth()
+})
 </script>
 
 <style scoped>
@@ -402,11 +624,11 @@ const changePage = (page) => {
 .page-title {
   font-size: 2.5rem;
   font-weight: 700;
-  color: #333;
+  color: var(--text-on-dark);
 }
 
 .page-subtitle {
-  color: #666;
+  color: #cfcfc9;
   font-size: 1.1rem;
 }
 
@@ -416,14 +638,14 @@ const changePage = (page) => {
 }
 
 .empty-orders {
-  background: white;
+  background: var(--black-800);
   border-radius: 15px;
-  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+  box-shadow: 0 5px 15px rgba(0,0,0,0.35);
   padding: 3rem;
 }
 
 .empty-title {
-  color: #333;
+  color: var(--text-on-dark);
   margin-bottom: 1rem;
 }
 
@@ -441,7 +663,7 @@ const changePage = (page) => {
 
 .order-id {
   font-weight: 700;
-  color: #333;
+  color: var(--text-on-dark);
 }
 
 .order-meta {
@@ -454,16 +676,16 @@ const changePage = (page) => {
 
 .order-restaurant {
   font-weight: 500;
-  color: #666;
+  color: #cfcfc9;
 }
 
 .order-total {
   font-size: 1.2rem;
-  color: #007bff;
+  color: var(--gold-500);
 }
 
 .items-summary {
-  background-color: #f8f9fa;
+  background-color: rgba(201,162,39,0.08);
   border-radius: 8px;
   padding: 1rem;
 }
@@ -499,7 +721,7 @@ const changePage = (page) => {
 
 .section-title {
   font-weight: 600;
-  color: #333;
+  color: var(--text-on-dark);
   margin-bottom: 1rem;
 }
 
@@ -517,21 +739,73 @@ const changePage = (page) => {
 }
 
 .order-summary {
-  background-color: #f8f9fa;
+  background-color: rgba(201,162,39,0.08);
   padding: 1rem;
   border-radius: 8px;
   margin-top: 1rem;
 }
 
+/* Modal dark theme */
+.modal-dark {
+  background-color: var(--black-800);
+  color: var(--text-on-dark);
+}
+
+.modal-dark .modal-header {
+  border-bottom-color: rgba(201,162,39,0.2);
+}
+
+.modal-dark .modal-footer {
+  border-top-color: rgba(201,162,39,0.2);
+}
+
+.modal-dark .btn-close {
+  filter: invert(1);
+}
+
+/* Star Rating */
+.star-rating {
+  font-size: 2.5rem;
+}
+
+.star-btn {
+  background: none;
+  border: none;
+  color: #666;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  padding: 0.25rem;
+}
+
+.star-btn:hover,
+.star-btn.active {
+  color: var(--gold-500);
+  transform: scale(1.1);
+}
+
+/* Quick Reviews */
+.quick-reviews .btn-outline-secondary {
+  border-color: rgba(201,162,39,0.3);
+  color: var(--text-on-dark);
+}
+
+.quick-reviews .btn-outline-secondary:hover {
+  background-color: rgba(201,162,39,0.12);
+  border-color: var(--gold-500);
+}
+
 .pagination .page-link {
   border-radius: 8px;
   margin: 0 2px;
-  border: 1px solid #dee2e6;
+  border: 1px solid #2a2b2f;
+  background: var(--black-800);
+  color: var(--text-on-dark);
 }
 
 .pagination .page-item.active .page-link {
-  background-color: #007bff;
-  border-color: #007bff;
+  background-color: var(--gold-500);
+  border-color: var(--gold-500);
+  color: #111;
 }
 
 /* Responsive Design */
