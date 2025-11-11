@@ -19,7 +19,7 @@
     </section>
 
     <!-- Contact Form & Info Section -->
-    <section class="contact-section py-5">
+    <section id="contact-form" class="contact-section py-5">
       <div class="container">
         <div class="row g-5">
           <!-- Contact Form -->
@@ -314,11 +314,14 @@ const faqs = ref([
   }
 ])
 
+// API base URL
+const API_BASE = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000'
+
 const submitForm = async () => {
   if (!contactForm.value.firstName || !contactForm.value.lastName || 
       !contactForm.value.email || !contactForm.value.subject || 
       !contactForm.value.message) {
-    errorMessage.value = 'Please fill in all required fields.'
+    await window.Swal?.fire({ icon: 'error', title: 'Incomplete form', text: 'Please fill in all required fields.' })
     return
   }
 
@@ -327,9 +330,21 @@ const submitForm = async () => {
   successMessage.value = ''
 
   try {
-    // Simulate API call
-    await new Promise(resolve => setTimeout(resolve, 2000))
-    
+    const res = await fetch(`${API_BASE}/api/contact/submit`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        firstName: contactForm.value.firstName,
+        lastName: contactForm.value.lastName,
+        email: contactForm.value.email,
+        phone: contactForm.value.phone,
+        subject: contactForm.value.subject,
+        message: contactForm.value.message
+      })
+    })
+    const data = await res.json()
+    if (!res.ok || !data.success) throw new Error(data.message || 'Submission failed')
+
     // Reset form
     contactForm.value = {
       firstName: '',
@@ -339,10 +354,10 @@ const submitForm = async () => {
       subject: '',
       message: ''
     }
-    
-    successMessage.value = 'Thank you for your message! We\'ll get back to you within 24 hours.'
+
+    await window.Swal?.fire({ icon: 'success', title: 'Message sent', text: 'We\'ll get back to you within 24 hours.' })
   } catch (error) {
-    errorMessage.value = 'Failed to send message. Please try again later.'
+    await window.Swal?.fire({ icon: 'error', title: 'Failed to send', text: error?.message || 'Please try again later.' })
   } finally {
     isLoading.value = false
   }

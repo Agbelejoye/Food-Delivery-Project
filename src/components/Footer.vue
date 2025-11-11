@@ -36,7 +36,7 @@
         <div class="col-lg-2 col-md-6 mb-4">
           <h6 class="fw-bold mb-3">For Business</h6>
           <ul class="list-unstyled">
-            <li><a href="#" class="text-muted text-decoration-none">Partner with Us</a></li>
+            <li><router-link to="/partner" class="text-muted text-decoration-none">Partner with Us</router-link></li>
             <li><router-link to="/register?role=restaurant" class="text-muted text-decoration-none">Add Restaurant</router-link></li>
             <li><router-link to="/register?role=agent" class="text-muted text-decoration-none">Become a Driver</router-link></li>
             <li><a href="#" class="text-muted text-decoration-none">Business Portal</a></li>

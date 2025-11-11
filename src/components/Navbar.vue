@@ -22,6 +22,11 @@
               <i class="bi bi-grid me-1"></i>Browse Menu
             </router-link>
           </li>
+          <li class="nav-item">
+            <router-link class="nav-link" to="/partner" active-class="active">
+              <i class="bi bi-people-fill me-1"></i>Partner With Us
+            </router-link>
+          </li>
           
           <!-- Show different nav items based on authentication -->
           <template v-if="authStore.isAuthenticated">

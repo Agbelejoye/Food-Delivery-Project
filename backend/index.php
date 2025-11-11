@@ -64,6 +64,15 @@ $router->add('DELETE', '/api/admin/restaurants/{id}', 'AdminController@deleteRes
 // File upload routes
 $router->add('POST', '/api/upload', 'UploadController@store', ['auth']);
 
+// Contact routes
+$router->add('POST', '/api/contact/submit', 'ContactController@submit');
+
+// Partner routes
+$router->add('POST', '/api/partners/apply', 'PartnerController@apply');
+$router->add('POST', '/api/partners/assets', 'PartnerController@uploadAssets');
+$router->add('GET', '/api/partners/testimonials', 'PartnerController@testimonials');
+$router->add('POST', '/api/partners/testimonials', 'PartnerController@createTestimonial', ['auth', 'admin']);
+
 // Get request URI and method
 $requestUri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 $requestMethod = $_SERVER['REQUEST_METHOD'];
